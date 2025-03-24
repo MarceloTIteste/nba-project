@@ -1,82 +1,36 @@
-🏀 NBA Team Stats Analyzer
-My First Python Data Project
+# 🏀 NBA Team Stats Analyzer  
+*A beginner Python project for sports data analysis*
 
-A beginner-friendly script that combines and cleans NBA data for analysis
+![Python](https://img.shields.io/badge/python-3670A0?style=flat&logo=python&logoColor=ffdd54)
+![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=flat&logo=pandas&logoColor=white)
+![Power BI](https://img.shields.io/badge/power_bi-F2C811?style=flat&logo=powerbi&logoColor=black)
 
-🌟 About This Project
-This was my first Python data project where I learned to:
+## 📖 About This Project
+This was my first Python data project! I created a script that:
+- Combines NBA team statistics with franchise information
+- Cleans and prepares the data for analysis
+- Outputs a Power BI-ready dataset
 
-Load and explore CSV files using pandas
+Through this project I learned to work with pandas, handle real-world data issues, and use SQL-like joins in Python.
 
-Combine datasets with SQL-like joins (thanks to pandasql!)
+## 🔧 How It Works
 
-Handle missing data by filling arena capacities
+### Data Flow
+1. **Input Files**:
+   - `ranking.csv` - Team performance data (wins, losses, etc.)
+   - `teams.csv` - Franchise information (locations, arenas, etc.)
 
-Transform columns (splitting home records into wins/losses)
-
-Prepare data for Power BI visualization
-
-The script takes raw NBA team stats and franchise info, cleans them up, and outputs analysis-ready data.
-
-🛠️ How It Works
-Data Processing Steps:
-Input Files
-
-ranking.csv: Team performance (wins, losses, home records)
-
-teams.csv: Franchise details (location, arena, management)
-
-Magic Happens
-
-Merges datasets to connect teams with their stats
-
-Fixes missing arena capacities using average values
-
-Splits "24-7" home records into separate win/loss columns
-
-Output
-Clean nba_clean.csv ready for Power BI dashboards
-
-🚀 Getting Started
-Prerequisites
-
-bash
-Copy
-pip install pandas pandasql
-Run the Script
-
-bash
-Copy
-python nba_analysis.py
-Visualize
-Import nba_clean.csv into Power BI to create your first dashboard!
-
-📊 Sample Analysis Ideas
-Which teams have the best home records?
-
-Does arena capacity correlate with team success?
-
-Compare conference performance
-
-💡 Lessons Learned
-Through this project I:
-
-Discovered how real-world data often needs cleaning
-
-Learned to troubleshoot errors (like column name mismatches!)
-
-Gained confidence working with Python and datasets
-
-🤝 Want to Improve This?
-Suggestions welcome! This is my first project and I'm excited to keep learning.
-
-"The first of many data projects!"
-
-This version:
-✅ Keeps it beginner-friendly but professional
-✅ Highlights your learning journey
-✅ Explains the technical process simply
-✅ Includes motivational elements
-✅ Maintains clean formatting
-
-Want to add a screenshot of your final data? Or include your Power BI dashboard image later? Just paste it in!
+2. **Processing**:
+   ```python
+   # Merge datasets
+   query = """
+       SELECT r.TEAM, t.ABBREVIATION, t.CITY, r.W, r.L, r.W_PCT, 
+              r.HOME_RECORD, t.ARENACAPACITY
+       FROM ranking_df r
+       LEFT JOIN teams_df t ON r.TEAM_ID = t.TEAM_ID 
+                            AND r.LEAGUE_ID = t.LEAGUE_ID
+   """
+   joined_df = sqldf(query, globals())
+   
+   # Clean data
+   joined_df['ARENACAPACITY'] = joined_df['ARENACAPACITY'].fillna(arena_avg)
